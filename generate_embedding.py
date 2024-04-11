@@ -129,7 +129,7 @@ def embedder(text: list[dict], EMBEDDING_MODEL: str, ST_DEVICE: str) -> list[dic
 
 
 def main(FILENAME: str, OUTFILENAME: str,
-         SENTENCE_CHUNK_SIZE: int, EMBEDDING_MODEL: str | None, ST_DEVICE: str | None,
+         SENTENCE_CHUNK_SIZE: int, EMBEDDING_MODEL: str, ST_DEVICE: str,
          EMB_MODEL_MAX_WORDS: int, MIN_TOKENS: int) -> None:
     """
     Steps: 
@@ -162,15 +162,46 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description="Create csv with text embedding."
     )
-    parser.add_argument("--filename", default="data.csv", type=str)
-    parser.add_argument("--outfilename", default="data_embedded_output.csv", type=str)
-    parser.add_argument("--embedding_model", default="all-mpnet-base-v2", type=str)
-    parser.add_argument("--sentence_chunk_size", default=8, type=int)
-    parser.add_argument("--emb_model_max_words", default=354, type=int)
-    parser.add_argument("--min_tokens", default=30, type=int)
-    parser.add_argument("--st_device", default="cpu", type=str)
-    parser.add_argument("--use_gpu", action="store_true")
-    parser.add_argument("--quiet", action="store_true")
+    parser = argparse.ArgumentParser(description="Create csv with text embedding.")
+    
+    parser.add_argument("--filename", 
+                        default="data.csv", 
+                        type=str, 
+                        help="Input CSV filename containing text data.")
+    
+    parser.add_argument("--outfilename", 
+                        default="data_embedded_output.csv", 
+                        type=str, 
+                        help="Output CSV filename to save embedded text data.")
+    
+    parser.add_argument("--embedding_model", 
+                        default="all-mpnet-base-v2", 
+                        type=str, 
+                        help="Name of the pre-trained embedding model to use.")
+    
+    parser.add_argument("--sentence_chunk_size", 
+                        default=8, 
+                        type=int, 
+                        help="Maximum number of sentences to process at once.")
+    
+    parser.add_argument("--emb_model_max_words", 
+                        default=354, 
+                        type=int, 
+                        help="Maximum number of words in a single input sequence to the embedding model.")
+    
+    parser.add_argument("--min_tokens", 
+                        default=30, 
+                        type=int, 
+                        help="Minimum number of tokens required in a sentence to be considered for embedding.")
+    
+    parser.add_argument("--st_device", 
+                        default="cpu", 
+                        type=str, 
+                        help="Device to perform the embedding computations on (e.g., 'cpu' or 'cuda:0').")
+    
+    parser.add_argument("--use_gpu", 
+                        action="store_true", 
+                        help="Flag to indicate whether to use GPU for computation.")
     args = parser.parse_args()
 
     main(args.filename, args.outfilename, args.sentence_chunk_size, args.embedding_model,
